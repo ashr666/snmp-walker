@@ -1,0 +1,12 @@
+{
+	"2" : "integer 32b",
+	"4" : "octet string",
+	"5" : "null",
+	"6" : "object identifier",
+	"40" : "ip address",
+	"41" : "counter",
+	"42" : "gauge (unsigned 32b)",
+	"43" : "time ticks",
+	"44" : "opaque",
+	"46" : "counter 64b"
+}
