@@ -14,7 +14,13 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav pull-right">
-        <li><a href="#">About</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#about">About</a></li>
+        <li><a href="#">Help</a></li>
+        <li>
+          <a href="#" data-toggle="modal" data-target="#references">
+            References
+          </a>
+        </li>
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -27,3 +33,54 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+
+
+
+<!-- modal about -->
+<div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="aboutModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="aboutModal">About</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+        <b>snmpWalker</b> is a webapp that allows you to perform a SNMP <code>WALK</code> or <code>GET</code> over a certain <b>oid</b> and prompts the result in human readable data. Not only in number format.
+        </p>
+        <p>It is a full stack javascript app tested on a debian server with <b>snmpd.</b></p>
+        <p class="text-muted">
+          This web app by <a target="_blank" href="//twitter.com/_jesusdario">@_jesusdario</a> is a project for Net Management at the University of Sevilla. Checkout the GitHub repo <a target="_blank" href="//github.com/jesusdario/xy-net-mon">here</a> <i class="fa fa-github">.</i> You can mail me! <i class="fa fa-envelope-o"></i> jesusdriru <i class="fa fa-at"></i> gmail.com.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal references -->
+<div class="modal fade" id="references" tabindex="-1" role="dialog" aria-labelledby="referencesModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="referencesModal">Bibliography, references and tutorials</h4>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li>https://wiki.debian.org/SNMP</li>
+          <li>https://getbootstrap.com for styling</li>
+          <li>https://angularjs.org for front-end</li>
+          <li>https://nodejs.org for back-end</li>
+          <li>http://www.net-snmp.org/wiki/index.php/TUT:snmptranslate</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

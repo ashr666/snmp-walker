@@ -1,8 +1,10 @@
 angular.module('app', [])
 .controller('main', ['$scope', '$http', function ($scope, $http) {
+  $scope.loading = true;
   $http.get('/walk' + location.search).
-   success(function(data, status, headers, config) {
+  success(function(data, status, headers, config) {
     $scope.query = data.query;
+    $scope.host = data.host;
     var walk = data.walk;
     $scope.walk = walk;
     walk.forEach(function (vb) {
@@ -11,39 +13,41 @@ angular.module('app', [])
         console.log(vb.reference);
       }
     });
-    $scope.duration = walk[walk.length -1].receiveStamp - walk[0].sendStamp;
+    if (walk.length > 1)
+      $scope.duration = walk[walk.length -1].receiveStamp - walk[0].sendStamp;
+    $scope.loading = false;
   }).
-   error(function(data, status, headers, config) {
+  error(function(data, status, headers, config) {
     console.log("Could not fetch apps");
   });
 }])
 .directive('tooltip', function(){
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs){
-            $(element).hover(function(){
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs){
+      $(element).hover(function(){
                 // on mouseenter
                 $(element).tooltip('show');
-            }, function(){
+              }, function(){
                 // on mouseleave
                 $(element).tooltip('hide');
-            });
-        }
-    };
+              });
+    }
+  };
 })
 .directive('popover', function(){
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs){
-            $(element).hover(function(){
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs){
+      $(element).hover(function(){
                 // on mouseenter
                 $(element).popover('show');
-            }, function(){
+              }, function(){
                 // on mouseleave
                 $(element).popover('hide');
-            });
-        }
-    };
+              });
+    }
+  };
 })
 .directive('jdNavbar', function() {
   return {

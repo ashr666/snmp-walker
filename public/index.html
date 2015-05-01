@@ -13,20 +13,37 @@
     <meta name="jesusdario" content="netbeast">
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <!-- icons -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <style type="text/css" media="screen">
+        .navbar{
+            border-radius: 0px;
+        }
+        .fa-refresh  {
+            margin-top: 100px;
+            font-size: 80px;
+        }
+    </style>
 </head>
 
-<body>
+<body data-ng-controller="main">
 
     <jd-navbar></jd-navbar>
 
-    <main
-    class="col-xs-12 col-sm-10 col-xs-offset-0 col-sm-offset-1" 
-    data-ng-controller="main">
-    <h1>snmp <code>WALK</code> {{query.oidReadable || query.oid}}</h1>
+    <div ng-show="loading" class="col-xs-12 text-center">
+        <i class="fa fa-refresh fa-spin"></i>
+    </div> 
+
+    <main ng-class="{ hidden: loading }"
+    class="col-xs-12 col-sm-10 col-xs-offset-0 col-sm-offset-1 hidden">
+    
+    <h1>
+    snmp <code>WALK</code> {{query.oidReadable || query.oid}} @ {{host}}
+    </h1>
+
     <table class="table table-bordered table-striped">
         <tr>
             <th>oid</th>
@@ -51,7 +68,7 @@
         </tr>
     </table>
     <p class="col-xs-12">
-        The SNMP request took <code>{{duration}} ms</code> between the first SNMP <b>GET</b> sendStamp and the last SNMP <b>GET</b> receiveStamp.
+        The SNMP request took <code>{{duration || 0}} ms</code> between the first SNMP <b>GET</b> sendStamp and the last SNMP <b>GET</b> receiveStamp.
     </p>
     <br/>
 </main>

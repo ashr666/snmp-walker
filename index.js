@@ -9,17 +9,18 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/walk', function(req, res)  {
 
+	var queryOid =  req.query.oid || '.1.3.6.1.2.1';
+	var queryHost =  req.query.host || 'localhost';
+	console.log(req.query);
+
 	var session = new snmp.Session({ 
 		host: 'localhost', 
 		port: 161,
 		community: 'public' 
 	});
 
-	var queryOid =  req.query.oid || '.1.3.6.1.2.1';
-	console.log(req.query);
-
 	// perform a SNMP walk
-	session.getSubtree({ oid: queryOid }, function (err, varbinds) {
+	session.get({ oid: queryOid }, function (err, varbinds) {
 		if (err) { 
 			throw err;
 		} else {
@@ -33,6 +34,7 @@ app.get('/walk', function(req, res)  {
 					oid : queryOid,
 					oidReadable : oidsRef[queryOid]
 				},
+				host : queryHost,
 				walk : varbinds
 			});
 		}
