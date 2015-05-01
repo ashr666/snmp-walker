@@ -3,6 +3,7 @@ angular.module('app', [])
   $http.get('/walk' + location.search).
    success(function(data, status, headers, config) {
     $scope.query = data.query;
+    $scope.method = data.method;
     var walk = data.walk;
     $scope.walk = walk;
     walk.forEach(function (vb) {

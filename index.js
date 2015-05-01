@@ -16,29 +16,55 @@ app.get('/walk', function(req, res)  {
 	});
 
 	var queryOid =  req.query.oid || '.1.3.6.1.2.1';
-	console.log(req.query);
+	
+	if (req.query.get == 1) {
 
-	// perform a SNMP walk
-	session.getSubtree({ oid: queryOid }, function (err, varbinds) {
-		if (err) { 
-			throw err;
-		} else {
-			varbinds.forEach(function (vb) {
+		session.get({ oid: queryOid }, function (err, varbinds) {
+			if (err) { 
+				throw err;
+			} else {
+				varbinds.forEach(function (vb) {
 				// turn data to human readable
 				vb.oidReadable = oidsRef['.' + vb.oid.join('.')];
 				vb.typeReadable = typesRef[vb.type.toString(16)];
 			});
-			res.json({
-				query : {
-					oid : queryOid,
-					oidReadable : oidsRef[queryOid]
-				},
-				walk : varbinds
-			});
-		}
-		session.close();
-	});
+				res.json({
+					query : {
+						oid : queryOid,
+						oidReadable : oidsRef[queryOid]
+					},
+					method : 'GET',
+					walk : varbinds
+				});
+			}
+			session.close();
+		});
 
+	} else {
+
+		// perform a SNMP walk
+		session.getSubtree({ oid: queryOid }, function (err, varbinds) {
+			if (err) { 
+				throw err;
+			} else {
+				varbinds.forEach(function (vb) {
+				// turn data to human readable
+				vb.oidReadable = oidsRef['.' + vb.oid.join('.')];
+				vb.typeReadable = typesRef[vb.type.toString(16)];
+			});
+				res.json({
+					query : {
+						oid : queryOid,
+						oidReadable : oidsRef[queryOid]
+					},
+					method : 'WALK',
+					walk : varbinds
+				});
+			}
+			session.close();
+		});
+
+	}
 });
 
 var server = app.listen(3000, function () {
