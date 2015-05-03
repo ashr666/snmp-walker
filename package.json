@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/jesusdario/xy-net-mon",
   "dependencies": {
+    "deasync": "0.0.10",
     "express": "^4.12.3",
     "net-snmp": "^1.1.13",
     "nodemon": "^1.3.7",

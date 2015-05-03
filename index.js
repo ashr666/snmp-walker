@@ -2,22 +2,25 @@ var snmp = require('snmp-native')
 //http://stackoverflow.com/questions/14572006/net-snmp-returned-types
 , typesRef = require('./dictionaries/typesHex') 
 , oidsRef = require('./dictionaries/oids')
-, exec = require('child_process').exec
+, deasync = require('deasync')
+, child = require('child_process')
+, exec = deasync(child.exec)
 , express = require('express')
 , fs = require('fs-extra')
 , app = express();
 
 app.use(express.static(__dirname + '/public'));
 
-app.get('/walk', function(req, res)  {
+app.get('/snmp', function(req, res)  {
 
 	var queryOid =  req.query.oid || '.1.3.6.1';
 	var queryHost =  req.query.host || 'localhost';
+	var queryCommunity =  req.query.community || 'public';
 
 	var session = new snmp.Session({ 
-		host: 'localhost', 
+		host: queryHost, 
 		port: 161,
-		community: 'public' 
+		community: queryCommunity 
 	});
 	
 	if (req.query.get == 1) {
@@ -25,19 +28,30 @@ app.get('/walk', function(req, res)  {
 		// perform a SNMP GET
 		session.get({ oid: queryOid }, function (err, varbinds) {
 			if (err) { 
-				throw err;
+				console.error(err);
+				res.status(500).send(err);
 			} else {
-				varbinds.forEach(function (vb) {
+				var vb = varbinds[0];
 				// turn data to human readable
 				vb.oidReadable = oidsRef['.' + vb.oid.join('.')];
 				vb.typeReadable = typesRef[vb.type.toString(16)];
-			});
+
+				var info = null;
+				try {
+					info = exec('snmptranslate -On -Td ' + queryOid);
+					console.log(info);
+				} catch (err) {
+					console.log(err);
+				}
+
 				res.json({
 					query : {
 						oid : queryOid,
 						oidReadable : oidsRef[queryOid]
 					},
+					info : info.replace(/(?:\r\n|\r|\n)/g, '<br />'),
 					host : queryHost,
+					community : queryCommunity,
 					method : 'GET',
 					walk : varbinds
 				});
@@ -50,7 +64,8 @@ app.get('/walk', function(req, res)  {
 		// perform a SNMP walk
 		session.getSubtree({ oid: queryOid }, function (err, varbinds) {
 			if (err) { 
-				throw err;
+				console.error(err);
+				res.status(500).send(err);
 			} else {
 				varbinds.forEach(function (vb) {
 				// turn data to human readable
@@ -63,6 +78,7 @@ app.get('/walk', function(req, res)  {
 						oidReadable : oidsRef[queryOid]
 					},
 					host : queryHost,
+					community : queryCommunity,
 					method : 'WALK',
 					walk : varbinds
 				});
@@ -85,25 +101,7 @@ function translate(vbOid) {
 	translation = oidsRef[oid]
 	if (!translation) {
 		//dictionary = fs.readJsonSync('./dictionaries/oids.json');
-		exec('snmptranslate ' + oid,
-			function (error, stdout, stderr) {
-				translation = stdout;
-				//dictionary[oid] = translation;
-				//fs.writeJsonSync('./dictionaries/oids.json', dictionary);
-				//oidsRef = require('./dictionaries/oids'); //reload
-				if (error !== null) {
-					console.log('exec error: ' + error);
-				}
-			});
+		translation = exec('snmptranslate ' + oid);
 	}
 	return translation;
-}
-
-function info(oid, cb) {
-	exec('snmptranslate -On -Td -Ib' + oid,
-		function (error, stdout, stderr) {
-			if (error !== null)
-				return console.log('exec error: ' + error);
-			cb(stdout);
-		});
 }

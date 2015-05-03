@@ -1,7 +1,7 @@
-angular.module('app', [])
+angular.module('app', ['ngSanitize'])
 .controller('main', ['$scope', '$http', function ($scope, $http) {
   $scope.loading = true;
-  $http.get('/walk' + location.search).
+  $http.get('/snmp' + location.search).
   success(function(data, status, headers, config) {
     $scope.req = data;
     var walk = data.walk;
@@ -17,7 +17,7 @@ angular.module('app', [])
     $scope.loading = false;
   }).
   error(function(data, status, headers, config) {
-    console.log("Could not fetch apps");
+    alert("Could not fetch server");
   });
 }])
 .directive('tooltip', function(){
