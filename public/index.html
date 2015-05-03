@@ -47,8 +47,9 @@
     <form class="navbar-form navbar-left" action="/">
         <div class="form-group">
           <input type="text" class="form-control" name="host" placeholder="hostname or ip" value="{{req.host}}"></input>
+          <input style="width: 65px;" type="text" class="form-control" name="port" placeholder="port" value="{{req.port}}"></input>
           <input type="text" class="form-control" name="oid" placeholder="numerical oid" value="{{req.query.oid}}"></input>
-          <input type="text" class="form-control" name="community" placeholder="community" value="{{req.community}}"></input>
+          <input style="width: 100px;" type="text" class="form-control" name="community" placeholder="community" value="{{req.community}}"></input>
       </div>
       <button type="submit" class="btn btn-warning">
           <i class="fa fa-rocket"> Walk!</i>
@@ -82,7 +83,10 @@
 <h2>More info</h2>
 <blockquote ng-show="req.info">
     <pre ng-bind-html="req.info"></pre>
-    <small>Output of <cite title="Source Title">snmptranslate -On -Td</cite></small>
+    <small>
+        Output of <cite title="Source Title">snmptranslate -On -Td</cite>. Even
+        more <a target="_blank" href="http://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid={{req.query.oid}}">here!</a>
+    </small>
 </blockquote>
 <p ng-hide="req.info" class="col-xs-12">
     The SNMP request took <code>{{duration || 0}} ms</code> between the first SNMP <b>GET</b> sendStamp and the last SNMP <b>GET</b> receiveStamp.

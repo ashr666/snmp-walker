@@ -15,11 +15,12 @@ app.get('/snmp', function(req, res)  {
 
 	var queryOid =  req.query.oid || '.1.3.6.1';
 	var queryHost =  req.query.host || 'localhost';
+	var queryPort =  req.query.port || '1616';
 	var queryCommunity =  req.query.community || 'public';
 
 	var session = new snmp.Session({ 
 		host: queryHost, 
-		port: 161,
+		port: queryPort,
 		community: queryCommunity 
 	});
 	
@@ -51,6 +52,7 @@ app.get('/snmp', function(req, res)  {
 					},
 					info : info.replace(/(?:\r\n|\r|\n)/g, '<br />'),
 					host : queryHost,
+					port : queryPort,
 					community : queryCommunity,
 					method : 'GET',
 					walk : varbinds
@@ -79,6 +81,7 @@ app.get('/snmp', function(req, res)  {
 					},
 					host : queryHost,
 					community : queryCommunity,
+					port : queryPort,
 					method : 'WALK',
 					walk : varbinds
 				});
@@ -89,7 +92,7 @@ app.get('/snmp', function(req, res)  {
 	}
 });
 
-var server = app.listen(3000, function () {
+var server = app.listen(80, function () {
 	console.log('Example app listening at http://%s:%s', 
 		server.address().address, 
 		server.address().port);
